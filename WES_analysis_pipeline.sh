@@ -1,7 +1,7 @@
 # WES ANALYSIS
 # --------------------------------
 # Map to reference genome
-bwa mem Homo_sapiens.GRCh37.GATK.illumina/Homo_sapiens.GRCh37.GATK.illumina.fasta datafiles/na12878_wes_brcagenes-1.fastq datafiles/na12878_wes_brcagenes-2.fastq > na12878_wes.sam
+bwa mem ../Homo_sapiens.GRCh37.GATK.illumina/Homo_sapiens.GRCh37.GATK.illumina.fasta ../datafiles/na12878_wes_brcagenes-1.fastq ../datafiles/na12878_wes_brcagenes-2.fastq > na12878_wes.sam
 
 # Create BAM file
 sambamba view -S -f bam na12878_wes.sam > na12878_wes.bam
@@ -14,8 +14,8 @@ sambamba markdup \na12878_wes.sorted.bam \dedupped_na12878_wes.sorted.bam
 
 # Add readgroups
 java -jar $PICARD AddOrReplaceReadGroups \
-I= dedupped_na12878_wes.sorted.bam \
-O= RG_dedupped_na12878_wes.sorted.bam \
+I=dedupped_na12878_wes.sorted.bam \
+O=RG_dedupped_na12878_wes.sorted.bam \
 CREATE_INDEX=true \
 RGLB= WES \
 RGPL= illumina \
@@ -25,8 +25,8 @@ RGPU= slide_barcode
 # Call variants
 java -jar $GATK \
 -T HaplotypeCaller \
--R Homo_sapiens.GRCh37.GATK.illumina/Homo_sapiens.GRCh37.GATK.illumina.fasta  \
--I  RG_dedupped_na12878_wes.sorted.bam \
+-R ../Homo_sapiens.GRCh37.GATK.illumina/Homo_sapiens.GRCh37.GATK.illumina.fasta  \
+-I RG_dedupped_na12878_wes.sorted.bam \
 -o RG_dedupped_na12878_wes.sorted.vcf
 
 # --------------------------------
